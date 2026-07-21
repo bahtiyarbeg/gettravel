@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Dashboard - Gettravel</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+        }
+        .admin-container { display: flex; min-height: 100vh; }
+
+        /* ── Sidebar ───────────────────────────────────────────── */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #1a202c 0%, #2d3748 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .sidebar-logo {
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .sidebar-logo i { color: #4299e1; }
+        .sidebar-menu { list-style: none; padding: 1.5rem 0; flex: 1; }
+        .sidebar-menu li {
+            padding: 0.75rem 2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+        }
+        .sidebar-menu li:hover { background: rgba(255,255,255,0.1); }
+        .sidebar-menu li.active {
+            background: rgba(66,153,225,0.25);
+            border-left: 3px solid #4299e1;
+        }
+        .sidebar-logout {
+            padding: 1rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #fc8181;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .sidebar-logout:hover { background: rgba(252,129,129,0.1); }
+
+        /* ── Main ──────────────────────────────────────────────── */
+        .main-content { flex: 1; padding: 2rem; overflow-y: auto; min-width: 0; }
+        .page-header {
+            background: white;
+            padding: 1.25rem 1.75rem;
+            border-radius: 12px;
+            margin-bottom: 1.75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        .page-header h1 { font-size: 1.5rem; color: #1a202c; }
+
+        /* ── Buttons ───────────────────────────────────────────── */
+        .btn {
+            padding: 0.65rem 1.4rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+        .btn:hover { transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-primary:hover { box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
+        .btn-success { background: #48bb78; color: white; }
+        .btn-success:hover { box-shadow: 0 4px 12px rgba(72,187,120,0.4); }
+        .btn-danger { background: #f56565; color: white; }
+        .btn-danger:hover { box-shadow: 0 4px 12px rgba(245,101,101,0.4); }
+        .btn-warning { background: #ed8936; color: white; }
+        .btn-secondary { background: #e2e8f0; color: #4a5568; }
+        .btn-small { padding: 0.35rem 0.85rem; font-size: 0.82rem; }
+
+        /* ── Stats ─────────────────────────────────────────────── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.75rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.4rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 4px solid #667eea;
+        }
+        .stat-card-value { font-size: 2rem; font-weight: 700; color: #667eea; margin-bottom: 0.4rem; }
+        .stat-card-label { color: #718096; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* ── Tours Grid ────────────────────────────────────────── */
+        .tours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        .tour-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .tour-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+        .tour-card-image { width: 100%; height: 180px; object-fit: cover; display: block; }
+        .tour-card-content { padding: 1.1rem; }
+        .tour-card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; color: #1a202c; line-height: 1.3; }
+        .tour-card-subtitle { color: #718096; margin-bottom: 0.6rem; font-size: 0.85rem; }
+        .tour-card-meta { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; font-size: 0.8rem; color: #718096; flex-wrap: wrap; align-items: center; }
+        .tour-card-price { font-size: 0.85rem; color: #667eea; margin-bottom: 0.75rem; font-weight: 600; }
+        .tour-card-actions { display: flex; gap: 0.5rem; }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-active { background: #c6f6d5; color: #276749; }
+        .badge-inactive { background: #fed7d7; color: #c53030; }
+        .badge-draft { background: #e9d8fd; color: #553c9a; }
+        .badge-featured { background: #fefcbf; color: #744210; }
+
+        .empty-state { text-align: center; padding: 4rem 2rem; color: #718096; grid-column: 1/-1; }
+        .empty-state i { font-size: 3.5rem; margin-bottom: 1rem; opacity: 0.3; display: block; }
+        .empty-state p { font-size: 1rem; }
+
+        /* ── Modal ─────────────────────────────────────────────── */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: flex-start;
+            z-index: 1000;
+            padding: 2rem 1rem;
+            overflow-y: auto;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white;
+            padding: 0;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 680px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+            animation: modalIn 0.2s ease;
+            margin: auto;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(-16px) scale(0.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .modal-header h2 { font-size: 1.3rem; color: #1a202c; }
+        .modal-close {
+            background: #f7fafc;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #718096;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .modal-close:hover { background: #e2e8f0; color: #1a202c; }
+        .modal-body { padding: 2rem; }
+
+        /* ── Form ──────────────────────────────────────────────── */
+        .form-group { margin-bottom: 1.1rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.88rem;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.65rem 0.9rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.93rem;
+            transition: border 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+            background: white;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.12);
+        }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+        .form-section-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #667eea;
+            margin: 1.5rem 0 0.75rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .checkbox-row { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.5rem; }
+        .checkbox-row input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #667eea; }
+        .checkbox-row label { margin: 0; font-weight: 500; cursor: pointer; }
+        .form-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            padding: 1.25rem 2rem;
+            border-top: 2px solid #e2e8f0;
+            background: #f7fafc;
+            border-radius: 0 0 16px 16px;
+        }
+        .modal-alert {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .modal-alert.show { display: flex; }
+        .modal-alert-success { background: #c6f6d5; color: #276749; }
+        .modal-alert-error   { background: #fed7d7; color: #c53030; }
+
+        /* ── Bookings table ────────────────────────────────────── */
+        .table-wrap { overflow-x: auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: #f7fafc; }
+        th { padding: 0.9rem 1rem; text-align: left; font-size: 0.82rem; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
+        td { padding: 0.9rem 1rem; border-bottom: 1px solid #f0f4f8; font-size: 0.9rem; vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #f7fafc; }
+
+        /* ── Settings ──────────────────────────────────────────── */
+        .settings-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+        .settings-card h3 {
+            font-size: 1.1rem;
+            color: #1a202c;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .settings-card > p { color: #718096; font-size: 0.88rem; margin-bottom: 1.25rem; }
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        .alert.show { display: block; }
+        .alert-success { background: #c6f6d5; color: #276749; }
+        .alert-error   { background: #fed7d7; color: #c53030; }
+
+        /* ── Loading spinner ───────────────────────────────────── */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            grid-column: 1/-1;
+        }
+        .loading-spinner i { font-size: 2rem; color: #667eea; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Save button spinner ───────────────────────────────── */
+        .btn.loading { opacity: 0.75; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+<!-- Auth Check — redirect to login if no valid session -->
+<script>
+(function() {
+    var isAuth = sessionStorage.getItem('admin_authenticated');
+    var loginTime = sessionStorage.getItem('admin_login_time');
+    if (!isAuth || !loginTime) { window.location.href = 'admin-login.html'; return; }
+    var elapsed = Date.now() - parseInt(loginTime);
+    if (elapsed >= 8 * 3600000) {
+        sessionStorage.removeItem('admin_authenticated');
+        sessionStorage.removeItem('admin_login_time');
+        window.location.href = 'admin-login.html';
+    }
+})();
+
+function logout() {
+    if (confirm('Are you sure you want to log out?')) {
+        sessionStorage.removeItem('admin_authenticated');
+        sessionStorage.removeItem('admin_login_time');
+        window.location.href = 'admin-login.html';
+    }
+}
+</script>
+
+<div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-umbrella-beach"></i>
+            <span>Gettravel Admin</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active" onclick="showSection('dashboard', this)">
+                <i class="fas fa-chart-pie"></i> Dashboard
+            </li>
+            <li onclick="showSection('tours', this)">
+                <i class="fas fa-map-marked-alt"></i> Tours
+            </li>
+            <li onclick="showSection('bookings', this)">
+                <i class="fas fa-calendar-check"></i> Bookings
+            </li>
+            <li onclick="showSection('settings', this)">
+                <i class="fas fa-cog"></i> Settings
+            </li>
+        </ul>
+        <div class="sidebar-logout" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Log Out
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- ── DASHBOARD ── -->
+        <section id="dashboard-section">
+            <div class="page-header">
+                <h1><i class="fas fa-chart-pie"></i> Dashboard</h1>
+                <span style="color:#718096;font-size:0.9rem;">Welcome back, Admin</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-value" id="total-tours">—</div>
+                    <div class="stat-card-label">Total Tours</div>
+                </div>
+                <div class="stat-card" style="border-color:#48bb78;">
+                    <div class="stat-card-value" id="active-tours" style="color:#48bb78;">—</div>
+                    <div class="stat-card-label">Active Tours</div>
+                </div>
+                <div class="stat-card" style="border-color:#ed8936;">
+                    <div class="stat-card-value" id="featured-tours" style="color:#ed8936;">—</div>
+                    <div class="stat-card-label">Featured</div>
+                </div>
+                <div class="stat-card" style="border-color:#a0aec0;">
+                    <div class="stat-card-value" id="draft-tours" style="color:#a0aec0;">—</div>
+                    <div class="stat-card-label">Drafts</div>
+                </div>
+                <div class="stat-card" style="border-color:#fc8181;">
+                    <div class="stat-card-value" id="total-bookings" style="color:#fc8181;">—</div>
+                    <div class="stat-card-label">Bookings</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── TOURS ── -->
+        <section id="tours-section" style="display:none;">
+            <div class="page-header">
+                <h1><i class="fas fa-map-marked-alt"></i> Manage Tours</h1>
+                <button class="btn btn-primary" onclick="openTourModal(null)">
+                    <i class="fas fa-plus"></i> Add New Tour
+                </button>
+            </div>
+            <div class="tours-grid" id="tours-grid">
+                <div class="loading-spinner"><i class="fas fa-spinner"></i></div>
+            </div>
+        </section>
+
+        <!-- ── BOOKINGS ── -->
+        <section id="bookings-section" style="display:none;">
+            <div class="page-header">
+                <h1><i class="fas fa-calendar-check"></i> Bookings</h1>
+                <button class="btn btn-success" onclick="loadBookings()">
+                    <i class="fas fa-sync"></i> Refresh
+                </button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Tour</th>
+                            <th>Guests</th>
+                            <th>Contact</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookings-body">
+                        <tr><td colspan="7" style="text-align:center;color:#718096;padding:2rem;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ── SETTINGS ── -->
+        <section id="settings-section" style="display:none;">
+            <div class="page-header">
+                <h1><i class="fas fa-cog"></i> Settings</h1>
+            </div>
+
+            <div class="settings-card">
+                <h3><i class="fas fa-lock"></i> Change Admin Password</h3>
+                <p>Password is stored as a SHA-256 hash in your browser's localStorage.</p>
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" id="current-pwd" placeholder="Enter current password" autocomplete="current-password">
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="new-pwd" placeholder="Minimum 8 characters" autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" id="confirm-pwd" placeholder="Repeat new password" autocomplete="new-password">
+                </div>
+                <button class="btn btn-primary" onclick="changePassword()">
+                    <i class="fas fa-save"></i> Save New Password
+                </button>
+                <div class="alert" id="pwd-alert"></div>
+            </div>
+
+            <div class="settings-card">
+                <h3><i class="fas fa-user-edit"></i> Change Username</h3>
+                <p>Change the admin login username (minimum 3 characters).</p>
+                <div class="form-group">
+                    <label>New Username</label>
+                    <input type="text" id="new-username" placeholder="Enter new username" autocomplete="username">
+                </div>
+                <button class="btn btn-warning" onclick="changeUsername()">
+                    <i class="fas fa-save"></i> Save Username
+                </button>
+                <div class="alert" id="user-alert"></div>
+            </div>
+
+            <div class="settings-card">
+                <h3><i class="fas fa-clock"></i> Session</h3>
+                <p>Sessions expire automatically after 8 hours. Logging out clears the session immediately.</p>
+                <button class="btn btn-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Log Out Now
+                </button>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ADD / EDIT TOUR MODAL
+════════════════════════════════════════════════════════════ -->
+<div class="modal" id="tour-modal" onclick="handleModalBackdrop(event)">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modal-title"><i class="fas fa-plus-circle" style="color:#667eea;margin-right:0.5rem;"></i>Add New Tour</h2>
+            <button class="modal-close" onclick="closeTourModal()" title="Close"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div class="modal-body">
+            <!-- Feedback alert inside modal -->
+            <div class="modal-alert" id="modal-alert">
+                <i class="fas fa-info-circle"></i>
+                <span id="modal-alert-text"></span>
+            </div>
+
+            <form id="tour-form" onsubmit="submitTourForm(event)">
+                <input type="hidden" id="tour-id">
+
+                <!-- Basic Info -->
+                <div class="form-section-title"><i class="fas fa-info-circle"></i> Basic Information</div>
+
+                <div class="form-group">
+                    <label>Tour Title <span style="color:#f56565">*</span></label>
+                    <input type="text" id="tour-title" required placeholder="e.g. Emperor Cruise 5★">
+                </div>
+
+                <div class="form-group">
+                    <label>Subtitle</label>
+                    <input type="text" id="tour-subtitle" placeholder="e.g. Evening yacht cruise with dinner">
+                </div>
+
+                <div class="form-group">
+                    <label>Short Description <span style="color:#f56565">*</span></label>
+                    <textarea id="tour-description" required placeholder="Brief description shown on tour cards..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Duration <span style="color:#f56565">*</span></label>
+                        <select id="tour-duration" required>
+                            <option value="">— Select —</option>
+                            <option value="1-2 Hours">1-2 Hours</option>
+                            <option value="Half Day">Half Day</option>
+                            <option value="4.5 Hours">4.5 Hours</option>
+                            <option value="Full Day">Full Day</option>
+                            <option value="Evening (4h)">Evening (4h)</option>
+                            <option value="2 Days / 1 Night">2 Days / 1 Night</option>
+                            <option value="3 Days / 2 Nights">3 Days / 2 Nights</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Category <span style="color:#f56565">*</span></label>
+                        <select id="tour-category" required>
+                            <option value="">— Select —</option>
+                            <option value="Adventure">Adventure</option>
+                            <option value="Adventure Island">Adventure Island</option>
+                            <option value="Adventure Park">Adventure Park</option>
+                            <option value="Beach">Beach</option>
+                            <option value="Beach Paradise">Beach Paradise</option>
+                            <option value="Beach Park">Beach Park</option>
+                            <option value="Combo Tour">Combo Tour</option>
+                            <option value="Culture">Culture</option>
+                            <option value="Eco Park">Eco Park</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Extreme">Extreme</option>
+                            <option value="Fishing & Snorkeling">Fishing &amp; Snorkeling</option>
+                            <option value="Island Hopping">Island Hopping</option>
+                            <option value="Luxury Cruise">Luxury Cruise</option>
+                            <option value="Marine Reserve">Marine Reserve</option>
+                            <option value="Nature">Nature</option>
+                            <option value="Nature Tour">Nature Tour</option>
+                            <option value="Natural Wonder">Natural Wonder</option>
+                            <option value="Private Beach">Private Beach</option>
+                            <option value="Spa & Wellness">Spa &amp; Wellness</option>
+                            <option value="Theme Park">Theme Park</option>
+                            <option value="Two Islands">Two Islands</option>
+                            <option value="VIP Experience">VIP Experience</option>
+                            <option value="Waterfalls">Waterfalls</option>
+                            <option value="Wellness & Beach">Wellness &amp; Beach</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Media -->
+                <div class="form-section-title"><i class="fas fa-image"></i> Media</div>
+
+                <div class="form-group">
+                    <label>Main Image URL <span style="color:#f56565">*</span></label>
+                    <input type="url" id="tour-image" required placeholder="https://example.com/photo.jpg">
+                </div>
+
+                <!-- Pricing -->
+                <div class="form-section-title"><i class="fas fa-dollar-sign"></i> Pricing (USD)</div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Adult Price</label>
+                        <input type="number" id="tour-adult-price" placeholder="0" min="0" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Child Price</label>
+                        <input type="number" id="tour-child-price" placeholder="0" min="0" step="1">
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="form-section-title"><i class="fas fa-toggle-on"></i> Publishing</div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Status <span style="color:#f56565">*</span></label>
+                        <select id="tour-status" required>
+                            <option value="active">Active</option>
+                            <option value="draft">Draft</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="display:flex;align-items:flex-end;padding-bottom:0.5rem;">
+                        <div class="checkbox-row">
+                            <input type="checkbox" id="tour-featured">
+                            <label for="tour-featured">⭐ Mark as Featured</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeTourModal()">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button type="submit" form="tour-form" class="btn btn-primary" id="save-btn">
+                <i class="fas fa-save"></i> Save Tour
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // ── State ─────────────────────────────────────────────────────
+    let allTours = [];
+    let editingTourId = null;
+
+    // ── Static Tours — always rendered regardless of API state ────
+    const STATIC_TOURS = [
+        { id:'tour-4-islands',        title:'4 Islands Tour',            subtitle:'Full day island hopping adventure',           description:'Discover 4 beautiful islands with snorkeling, seafood lunch, and water activities. Visit Hon Mun, Hon Mot, Hon Tam and Hon Mieu.',     duration:'Full Day',   category:'Island Hopping',      image_url:'https://images.unsplash.com/photo-1560275619-4cc5fa59d3ae?w=800&q=80', status:'active', featured:true,  adult_price:0, child_price:0 },
+        { id:'tour-3-islands',        title:'3 Islands Tour',            subtitle:'Classic island hopping in Nha Trang',          description:'Visit 3 stunning islands: Hon Mun, Hon Mot, and Hon Tam. Snorkeling, swimming, and fresh seafood lunch included.',                  duration:'Full Day',   category:'Island Hopping',      image_url:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-nemo',             title:'Nemo Trip',                 subtitle:'Fishing and snorkeling adventure',             description:'Combine fishing at sea with snorkeling in crystal-clear waters. Catch your own fish and enjoy a BBQ lunch on the boat.',              duration:'Full Day',   category:'Fishing & Snorkeling',image_url:'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-hon-mun',          title:'Hon Mun Marine Reserve',    subtitle:'Pristine coral reefs and marine life',         description:'Explore the protected Hon Mun Marine Reserve, home to vibrant coral reefs and diverse sea life. Perfect for snorkeling enthusiasts.',  duration:'Full Day',   category:'Marine Reserve',      image_url:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-hon-mun-mini-beach',title:'Hon Mun + Mini Beach',     subtitle:'Marine reserve plus private beach',            description:'Combine the best of Hon Mun Marine Reserve with a relaxing stop at the hidden Mini Beach. Snorkeling and beach time included.',       duration:'Full Day',   category:'Combo Tour',          image_url:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-hon-mun-hon-tam',  title:'Hon Mun + Hon Tam',         subtitle:'Two island experience',                        description:'Visit two of Nha Trangs most beautiful islands in one day. Marine snorkeling at Hon Mun and beach relaxation at Hon Tam.',          duration:'Full Day',   category:'Two Islands',         image_url:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-hon-tam',          title:'Hon Tam Island',            subtitle:'Pristine beach paradise',                      description:'Spend a full day on beautiful Hon Tam Island. Enjoy white sand beaches, crystal-clear water, and stunning natural scenery.',           duration:'Full Day',   category:'Beach Paradise',      image_url:'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-hon-tam-mud',      title:'Hon Tam with Mud Bath',     subtitle:'Wellness and beach relaxation',                description:'Combine the beauty of Hon Tam Island with a rejuvenating mineral mud bath. Relax on the beach and enjoy a therapeutic spa experience.',  duration:'Full Day',   category:'Wellness & Beach',    image_url:'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-mini-beach',       title:'Mini Beach',                subtitle:'Secluded private beach escape',                description:'Escape to the hidden Mini Beach, a secluded paradise away from the crowds. Perfect for swimming, sunbathing and relaxation.',           duration:'Full Day',   category:'Private Beach',       image_url:'https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-diep-son',         title:'Diep Son Sandbar',          subtitle:'Walk on water — unique tidal sandbar',         description:'Walk along the legendary Diep Son sandbar that appears above the sea at low tide. A stunning natural phenomenon unique to Vietnam.',    duration:'Full Day',   category:'Natural Wonder',      image_url:'https://images.unsplash.com/photo-1499678329028-101435549a4e?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-robinson',         title:'Robinson Island',           subtitle:'Deserted island adventure',                    description:'Feel like a castaway on Robinson Island, a remote and wild island with no tourists. The ultimate escape into untouched nature.',         duration:'Full Day',   category:'Adventure Island',    image_url:'https://images.unsplash.com/photo-1540202404-a2f29564651e?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-doi-dep',          title:'Doi Dep Island VIP',        subtitle:'Exclusive VIP island experience',              description:'An exclusive VIP tour to the beautiful Doi Dep Island. Private boat, gourmet lunch, and premium service for a truly luxurious day.',   duration:'Full Day',   category:'VIP Experience',      image_url:'https://images.unsplash.com/photo-1566438480900-0609be27a4be?w=800&q=80', status:'active', featured:true,  adult_price:0, child_price:0 },
+        { id:'tour-vinpearl',         title:'VinPearl Nha Trang',        subtitle:'World-class theme park and resort',            description:'Visit the iconic VinPearl Island with its world-class theme park, water park, and aquarium. A full day of fun for the whole family.',  duration:'Full Day',   category:'Theme Park',          image_url:'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-mirae-p1',         title:'Mirae Future Park P1',      subtitle:'Beach entertainment park — Part 1',            description:'Enjoy Mirae Future Park Part 1 with thrilling rides, water slides, and beachside entertainment. A perfect day out for families.',       duration:'Full Day',   category:'Beach Park',          image_url:'https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-mirae-p2',         title:'Mirae Future Park P2',      subtitle:'Beach entertainment park — Part 2',            description:'Explore Mirae Future Park Part 2 with additional attractions, pools, and entertainment. Combine with Part 1 for the ultimate park day.', duration:'Full Day',   category:'Beach Park',          image_url:'https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-ba-ho',            title:'Ba Ho Waterfalls',          subtitle:'Jungle trekking to three-level waterfalls',    description:'Trek through lush jungle to reach the stunning Ba Ho Waterfalls with three cascading levels. Swim in natural rock pools surrounded by nature.', duration:'Half Day',  category:'Waterfalls',          image_url:'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-yang-bay',         title:'Yang Bay Eco Park',         subtitle:'Eco park with waterfalls and wildlife',        description:'Discover Yang Bay Eco Park with its spectacular waterfalls, exotic wildlife, and lush tropical gardens. A great eco-tourism experience.',  duration:'Full Day',   category:'Eco Park',            image_url:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-phu-yen',          title:'Phu Yen - Wild Vietnam',    subtitle:'Discover untouched natural beauty',            description:'Journey to Phu Yen province to explore Vietnams wild coastline with iconic rock formations, turquoise lagoons, and scenic landscapes.',  duration:'Full Day',   category:'Nature Tour',         image_url:'https://images.unsplash.com/photo-1559552819-94e2b1b58c7a?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-zen-atv',          title:'Zen ATV + Zipline',         subtitle:'Off-road ATV and zipline adventure',           description:'Get your adrenaline pumping with an ATV ride through jungle trails followed by a thrilling zipline over the forest canopy.',              duration:'Half Day',   category:'Extreme',             image_url:'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-kong-forest',      title:'Kong Forest',               subtitle:'Adventure park in the treetops',               description:'Explore Kong Forest Adventure Park with treetop obstacles, rope courses, and forest activities. Fun for thrill-seekers and nature lovers.',  duration:'Half Day',   category:'Adventure Park',      image_url:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 },
+        { id:'tour-emperor-cruise',   title:'Emperor Cruise 5\u2605',    subtitle:'Luxury sunset dinner cruise',                  description:'Sail on the luxurious Emperor Cruise for an unforgettable 4.5-hour voyage with gourmet dining, live music, and stunning bay views.',     duration:'4.5 Hours',  category:'Luxury Cruise',       image_url:'https://images.unsplash.com/photo-1599640842225-85d111c60e6b?w=800&q=80', status:'active', featured:true,  adult_price:0, child_price:0 },
+        { id:'tour-do-theatre',       title:'Do Theatre Show',           subtitle:'Traditional Vietnamese circus performance',    description:'Experience the award-winning Do Theatre — a spectacular blend of traditional Vietnamese circus, acrobatics, and folk culture on stage.',   duration:'1-2 Hours',  category:'Entertainment',       image_url:'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=800&q=80', status:'active', featured:false, adult_price:0, child_price:0 }
+    ];
+
+    // ── Boot ──────────────────────────────────────────────────────
+    (async function init() {
+        await loadTours();
+        loadBookingsCount();
+    })();
+
+    // ── Navigation ────────────────────────────────────────────────
+    function showSection(section, el) {
+        document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
+        if (el) el.classList.add('active');
+        ['dashboard','tours','bookings','settings'].forEach(s => {
+            document.getElementById(s + '-section').style.display = (s === section) ? 'block' : 'none';
+        });
+        if (section === 'tours')    loadTours();
+        if (section === 'bookings') loadBookings();
+    }
+
+    // ── Load Tours (merges API overrides with static list) ────────
+    async function loadTours() {
+        const grid = document.getElementById('tours-grid');
+        grid.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner"></i></div>';
+        try {
+            const res      = await fetch('tables/tours?limit=200');
+            const data     = await res.json();
+            const apiTours = data.data || [];
+
+            // Map API tours by id for fast lookup
+            const apiMap = {};
+            apiTours.forEach(function(t) { apiMap[t.id] = t; });
+
+            // Merge: static base + API overrides; API wins on shared fields
+            allTours = STATIC_TOURS.map(function(st) {
+                return apiMap[st.id] ? Object.assign({}, st, apiMap[st.id]) : st;
+            });
+
+            // Add any API-only tours (created via "Add New Tour")
+            apiTours.forEach(function(t) {
+                if (!STATIC_TOURS.find(function(st) { return st.id === t.id; })) {
+                    allTours.push(t);
+                }
+            });
+
+        } catch (e) {
+            // API unavailable — still show all 22 static tours
+            allTours = STATIC_TOURS.slice();
+        }
+        renderTours();
+        updateStats();
+    }
+
+    function renderTours() {
+        const grid = document.getElementById('tours-grid');
+        if (!allTours.length) {
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <p>No tours yet. Click <strong>Add New Tour</strong> to create your first tour.</p>
+                </div>`;
+            return;
+        }
+        grid.innerHTML = allTours.map(t => {
+            const fallback = 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80';
+            const price    = t.adult_price
+                ? `Adult: $${t.adult_price}${t.child_price ? ' · Child: $' + t.child_price : ''}`
+                : '';
+            return `
+            <div class="tour-card" id="card-${t.id}">
+                <img src="${esc(t.image_url) || fallback}" alt="${esc(t.title)}"
+                     class="tour-card-image"
+                     onerror="this.src='${fallback}'">
+                <div class="tour-card-content">
+                    <div class="tour-card-title">${esc(t.title) || 'Untitled'}</div>
+                    <div class="tour-card-subtitle">${esc(t.subtitle) || ''}</div>
+                    <div class="tour-card-meta">
+                        <span><i class="fas fa-clock"></i> ${esc(t.duration) || '—'}</span>
+                        <span><i class="fas fa-tag"></i> ${esc(t.category) || '—'}</span>
+                        <span class="badge badge-${t.status || 'draft'}">${t.status || 'draft'}</span>
+                        ${t.featured ? '<span class="badge badge-featured">⭐ Featured</span>' : ''}
+                    </div>
+                    ${price ? `<div class="tour-card-price">${price}</div>` : ''}
+                    <div class="tour-card-actions">
+                        <button class="btn btn-primary btn-small" onclick="openTourModal('${t.id}')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger btn-small" onclick="deleteTour('${t.id}', '${escQ(t.title)}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function updateStats() {
+        document.getElementById('total-tours').textContent    = allTours.length;
+        document.getElementById('active-tours').textContent   = allTours.filter(t => t.status === 'active').length;
+        document.getElementById('featured-tours').textContent = allTours.filter(t => t.featured).length;
+        document.getElementById('draft-tours').textContent    = allTours.filter(t => t.status === 'draft').length;
+    }
+
+    // ── Tour Modal: Open ──────────────────────────────────────────
+    function openTourModal(tourId) {
+        editingTourId = tourId || null;
+        clearModalAlert();
+
+        const form  = document.getElementById('tour-form');
+        const title = document.getElementById('modal-title');
+
+        if (tourId) {
+            // ── EDIT: find tour and pre-fill form ──
+            const t = allTours.find(x => x.id === tourId);
+            if (!t) {
+                alert('Tour not found — please refresh the list.');
+                return;
+            }
+            title.innerHTML = '<i class="fas fa-edit" style="color:#667eea;margin-right:0.5rem;"></i>Edit Tour';
+            document.getElementById('tour-id').value           = t.id;
+            document.getElementById('tour-title').value        = t.title        || '';
+            document.getElementById('tour-subtitle').value     = t.subtitle     || '';
+            document.getElementById('tour-description').value  = t.description  || '';
+            document.getElementById('tour-duration').value     = t.duration     || '';
+            document.getElementById('tour-category').value     = t.category     || '';
+            document.getElementById('tour-image').value        = t.image_url    || '';
+            document.getElementById('tour-adult-price').value  = t.adult_price  || '';
+            document.getElementById('tour-child-price').value  = t.child_price  || '';
+            document.getElementById('tour-status').value       = t.status       || 'draft';
+            document.getElementById('tour-featured').checked   = !!t.featured;
+        } else {
+            // ── ADD: reset form ──
+            title.innerHTML = '<i class="fas fa-plus-circle" style="color:#667eea;margin-right:0.5rem;"></i>Add New Tour';
+            form.reset();
+            document.getElementById('tour-status').value = 'active';
+        }
+
+        document.getElementById('tour-modal').classList.add('active');
+        document.getElementById('tour-title').focus();
+    }
+
+    // ── Tour Modal: Close ─────────────────────────────────────────
+    function closeTourModal() {
+        document.getElementById('tour-modal').classList.remove('active');
+        editingTourId = null;
+    }
+
+    function handleModalBackdrop(e) {
+        if (e.target === document.getElementById('tour-modal')) closeTourModal();
+    }
+
+    // ── Tour Modal: Submit ────────────────────────────────────────
+    async function submitTourForm(e) {
+        e.preventDefault();
+        clearModalAlert();
+
+        const saveBtn = document.getElementById('save-btn');
+        saveBtn.classList.add('loading');
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+        const payload = {
+            title:        document.getElementById('tour-title').value.trim(),
+            subtitle:     document.getElementById('tour-subtitle').value.trim(),
+            description:  document.getElementById('tour-description').value.trim(),
+            duration:     document.getElementById('tour-duration').value,
+            category:     document.getElementById('tour-category').value,
+            image_url:    document.getElementById('tour-image').value.trim(),
+            adult_price:  parseFloat(document.getElementById('tour-adult-price').value) || 0,
+            child_price:  parseFloat(document.getElementById('tour-child-price').value) || 0,
+            status:       document.getElementById('tour-status').value,
+            featured:     document.getElementById('tour-featured').checked
+        };
+
+        try {
+            let res;
+            if (editingTourId) {
+                // For static tours: include the static id so we can match it on reload
+                payload.id = editingTourId;
+
+                // Try PUT first (works if tour already saved to API)
+                res = await fetch('tables/tours/' + editingTourId, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                // If tour not yet in API (static-only), POST it instead
+                if (res.status === 404) {
+                    res = await fetch('tables/tours', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                }
+            } else {
+                // CREATE new tour
+                res = await fetch('tables/tours', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            }
+
+            if (!res.ok) {
+                var errText = await res.text();
+                throw new Error('Server error ' + res.status + ': ' + errText);
+            }
+
+            // Success
+            showModalAlert('success',
+                editingTourId
+                    ? '\u2705 Tour "' + payload.title + '" updated successfully!'
+                    : '\u2705 Tour "' + payload.title + '" created successfully!'
+            );
+
+            // Reload tours list
+            await loadTours();
+            updateStats();
+
+            // Close modal after short delay
+            setTimeout(function() { closeTourModal(); }, 1200);
+
+        } catch (err) {
+            showModalAlert('error', '\u274C ' + err.message);
+        } finally {
+            saveBtn.classList.remove('loading');
+            saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Tour';
+        }
+    }
+
+    // ── Delete Tour ───────────────────────────────────────────────
+    async function deleteTour(tourId, tourName) {
+        if (!confirm('Delete tour "' + tourName + '"?\nThis action cannot be undone.')) return;
+        const isStatic = STATIC_TOURS.find(function(st) { return st.id === tourId; });
+        if (isStatic) {
+            alert('Static tours cannot be deleted from here.\nUse Edit to change status to "Inactive" instead.');
+            return;
+        }
+        try {
+            const res = await fetch('tables/tours/' + tourId, { method: 'DELETE' });
+            if (!res.ok) throw new Error('Server responded with ' + res.status);
+            await loadTours();
+            updateStats();
+        } catch (e) {
+            alert('Error deleting tour: ' + e.message);
+        }
+    }
+
+    // ── Bookings ──────────────────────────────────────────────────
+    async function loadBookingsCount() {
+        try {
+            const res  = await fetch('tables/bookings?limit=1');
+            const data = await res.json();
+            document.getElementById('total-bookings').textContent = data.total || 0;
+        } catch (e) {
+            document.getElementById('total-bookings').textContent = '?';
+        }
+    }
+
+    async function loadBookings() {
+        const tbody = document.getElementById('bookings-body');
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>';
+        try {
+            const res     = await fetch('tables/bookings?limit=100&sort=-created_at');
+            const data    = await res.json();
+            const bookings = data.data || [];
+            if (!bookings.length) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#718096;padding:2rem;">No bookings yet.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = bookings.map(b => `
+                <tr>
+                    <td>${b.created_at ? new Date(b.created_at).toLocaleDateString('en-GB') : '—'}</td>
+                    <td><strong>${esc(b.customer_name) || '—'}</strong></td>
+                    <td>${esc(b.tour_name) || '—'}</td>
+                    <td>${b.adults || 0}${b.children ? ' + ' + b.children + ' ch.' : ''}</td>
+                    <td>${esc(b.customer_phone || b.customer_email) || '—'}</td>
+                    <td>
+                        <span class="badge badge-${b.status === 'confirmed' ? 'active' : b.status === 'cancelled' ? 'inactive' : 'draft'}">
+                            ${b.status || 'pending'}
+                        </span>
+                    </td>
+                    <td style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+                        <button class="btn btn-success btn-small" onclick="setBookingStatus('${b.id}','confirmed')">
+                            <i class="fas fa-check"></i> Confirm
+                        </button>
+                        <button class="btn btn-danger btn-small" onclick="setBookingStatus('${b.id}','cancelled')">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </td>
+                </tr>`).join('');
+        } catch (e) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#c53030;padding:2rem;">Error: ${e.message}</td></tr>`;
+        }
+    }
+
+    async function setBookingStatus(id, status) {
+        try {
+            await fetch(`tables/bookings/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status })
+            });
+            loadBookings();
+        } catch (e) {
+            alert('Error updating booking: ' + e.message);
+        }
+    }
+
+    // ── Settings: Password ────────────────────────────────────────
+    async function sha256(msg) {
+        const buf  = new TextEncoder().encode(msg);
+        const hash = await crypto.subtle.digest('SHA-256', buf);
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    function showSettingAlert(id, type, msg) {
+        const el = document.getElementById(id);
+        el.className = 'alert show alert-' + type;
+        el.textContent = msg;
+        setTimeout(() => el.classList.remove('show'), 5000);
+    }
+
+    async function changePassword() {
+        const current = document.getElementById('current-pwd').value;
+        const newPwd  = document.getElementById('new-pwd').value;
+        const confirm = document.getElementById('confirm-pwd').value;
+        if (!current || !newPwd || !confirm) {
+            showSettingAlert('pwd-alert','error','All fields are required.'); return;
+        }
+        if (newPwd.length < 8) {
+            showSettingAlert('pwd-alert','error','Password must be at least 8 characters.'); return;
+        }
+        if (newPwd !== confirm) {
+            showSettingAlert('pwd-alert','error','New passwords do not match.'); return;
+        }
+        const currentHash = await sha256(current);
+        const storedHash  = localStorage.getItem('admin_pwd_hash')
+            || 'c2ef86b70d75a7b82bd18d4e18f534eeacc53e4be73e4e2965c4d30b50f0cf74';
+        if (currentHash !== storedHash) {
+            showSettingAlert('pwd-alert','error','Current password is incorrect.'); return;
+        }
+        localStorage.setItem('admin_pwd_hash', await sha256(newPwd));
+        document.getElementById('current-pwd').value = '';
+        document.getElementById('new-pwd').value     = '';
+        document.getElementById('confirm-pwd').value = '';
+        showSettingAlert('pwd-alert','success','Password updated successfully!');
+    }
+
+    function changeUsername() {
+        const u = document.getElementById('new-username').value.trim();
+        if (!u || u.length < 3) {
+            showSettingAlert('user-alert','error','Username must be at least 3 characters.'); return;
+        }
+        localStorage.setItem('admin_username', u);
+        document.getElementById('new-username').value = '';
+        showSettingAlert('user-alert','success',`Username changed to "${u}".`);
+    }
+
+    // ── Modal Alert Helpers ───────────────────────────────────────
+    function showModalAlert(type, msg) {
+        const el   = document.getElementById('modal-alert');
+        const text = document.getElementById('modal-alert-text');
+        el.className = `modal-alert show modal-alert-${type}`;
+        text.textContent = msg;
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    function clearModalAlert() {
+        document.getElementById('modal-alert').classList.remove('show');
+    }
+
+    // ── HTML Escape Helpers ───────────────────────────────────────
+    function esc(str) {
+        if (str == null) return '';
+        return String(str)
+            .replace(/&/g,'&amp;')
+            .replace(/</g,'&lt;')
+            .replace(/>/g,'&gt;')
+            .replace(/"/g,'&quot;');
+    }
+    function escQ(str) {
+        // For use inside onclick="...('VALUE',...)" — escape single quotes
+        if (str == null) return '';
+        return String(str).replace(/'/g,"\\'");
+    }
+
+    // ── Keyboard: Esc closes modal ────────────────────────────────
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeTourModal();
+    });
+</script>
+</body>
+</html>

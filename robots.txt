@@ -1,0 +1,36 @@
+User-agent: *
+Allow: /
+Disallow: /admin-dashboard.html
+Disallow: /admin-login.html
+Disallow: /admin-panel.html
+Disallow: /secret-admin.html
+Disallow: /js/analytics.js
+
+# Sitemap
+Sitemap: https://gettravel.fun/sitemap.xml
+
+# Crawl-delay for bots
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Disallow: /
+
+# Allow Googlebot, Yandex full access
+User-agent: Googlebot
+Allow: /
+Disallow: /admin-dashboard.html
+Disallow: /secret-admin.html
+
+User-agent: Yandex
+Allow: /
+Disallow: /admin-dashboard.html
+Disallow: /secret-admin.html
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin-dashboard.html
+Disallow: /secret-admin.html

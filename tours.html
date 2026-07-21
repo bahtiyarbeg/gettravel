@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Tours | Gettravel</title>
+    <meta name="description" content="Complete catalog of premium tours in Vietnam - island hopping, extreme adventures, cruises and nature tours in Nha Trang">
+    
+    <!-- Google Translate -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,ru,ko,zh-CN,tr,vi,uz',
+                layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <!-- ══ Google Analytics 4 ══ -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX',{anonymize_ip:true});</script>
+    <!-- ══ Yandex.Metrica ══ -->
+    <script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0];k.async=1;k.src=r;a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");if(typeof ym==='function'&&window._ymId){ym(window._ymId,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});}</script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/XXXXXXXX" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
+    
+    <link rel="stylesheet" href="css/style-new.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .tours-catalog {
+            padding: 60px 0 100px;
+            background: var(--color-bg-light);
+        }
+        
+        .page-header-tours {
+            padding: 140px 0 80px;
+            background: linear-gradient(135deg, #004E89 0%, #1A659E 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .page-header-tours h1 {
+            font-family: var(--font-display);
+            font-size: clamp(36px, 5vw, 56px);
+            margin-bottom: 16px;
+        }
+        
+        .page-header-tours p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .filters {
+            background: white;
+            padding: 30px 0;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 80px;
+            z-index: 100;
+        }
+        
+        .filters__wrapper {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 5px;
+        }
+        
+        .filter-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--color-border);
+            background: white;
+            color: var(--color-text);
+            border-radius: 50px;
+            font-family: var(--font-body);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-base);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+        
+        .tours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .tour-item {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-base);
+        }
+        
+        .tour-item:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .tour-item__image {
+            position: relative;
+            height: 240px;
+            overflow: hidden;
+        }
+        
+        .tour-item__image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .tour-item:hover .tour-item__image img {
+            transform: scale(1.1);
+        }
+        
+        .tour-item__badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 6px 14px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .tour-item__content {
+            padding: 24px;
+        }
+        
+        .tour-item__category {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--color-primary);
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        
+        .tour-item__title {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: 12px;
+        }
+        
+        .tour-item__description {
+            color: var(--color-text-light);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .tour-item__meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--color-border);
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--color-text-light);
+            font-size: 13px;
+        }
+        
+        .meta-item i {
+            color: var(--color-primary);
+        }
+        
+        #tours-loading {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .tours-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters__wrapper {
+                gap: 10px;
+            }
+            
+            .filter-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header scrolled" id="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo notranslate" translate="no">
+                <i class="fas fa-umbrella-beach"></i>
+                <span>Get</span>travel
+            </a>
+            
+            <!-- Google Translate Widget -->
+            <div id="google_translate_element" class="translate-widget"></div>
+            
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="index.html" class="nav__link">Home</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="tours.html" class="nav__link active">Tours</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="index.html#about" class="nav__link">About</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="index.html#contact" class="nav__link">Contact</a>
+                    </li>
+                </ul>
+                <div class="nav__close" id="nav-close">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header-tours">
+        <div class="container">
+            <h1>All Tours in Nha Trang</h1>
+            <p>Choose your perfect Vietnamese adventure from 22 premium tours</p>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters">
+        <div class="container">
+            <div class="filters__wrapper">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-th"></i>
+                    All Tours
+                </button>
+                <button class="filter-btn" data-filter="islands">
+                    <i class="fas fa-water"></i>
+                    Island &amp; Beach
+                </button>
+                <button class="filter-btn" data-filter="extreme">
+                    <i class="fas fa-hiking"></i>
+                    Extreme &amp; Adventure
+                </button>
+                <button class="filter-btn" data-filter="cruise">
+                    <i class="fas fa-ship"></i>
+                    Cruises
+                </button>
+                <button class="filter-btn" data-filter="nature">
+                    <i class="fas fa-tree"></i>
+                    Nature &amp; Waterfalls
+                </button>
+                <button class="filter-btn" data-filter="park">
+                    <i class="fas fa-ticket-alt"></i>
+                    Theme Parks
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tours Catalog — rendered dynamically from tours-config.js -->
+    <section class="tours-catalog">
+        <div class="container">
+            <div class="tours-grid" id="toursGrid">
+                <div id="tours-loading">⏳ Loading tours...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__about">
+                    <a href="index.html" class="footer__logo notranslate" translate="no">
+                        <i class="fas fa-umbrella-beach"></i>
+                        Gettravel
+                    </a>
+                    <p class="footer__description">
+                        Exclusive tours and unforgettable adventures in the most beautiful corners of Vietnam
+                    </p>
+                    <div class="footer__social">
+                        <a href="https://wa.me/84797722507" class="footer__social-link"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" class="footer__social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="footer__social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="footer__social-link"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer__links">
+                    <h4 class="footer__title">Quick Links</h4>
+                    <ul class="footer__list">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="tours.html">All Tours</a></li>
+                        <li><a href="index.html#about">About Us</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__links">
+                    <h4 class="footer__title">Popular Tours</h4>
+                    <ul class="footer__list">
+                        <li><a href="tour-4-islands.html">4 Islands</a></li>
+                        <li><a href="tour-emperor-cruise.html">Emperor Cruise</a></li>
+                        <li><a href="tour-vinpearl.html">VinPearl</a></li>
+                        <li><a href="tours.html">View All</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__contact">
+                    <h4 class="footer__title">Contact</h4>
+                    <ul class="footer__list">
+                        <li><i class="fas fa-phone"></i> +84 79 772 2507</li>
+                        <li><i class="fas fa-envelope"></i> tourvietn@gmail.com</li>
+                        <li><i class="fas fa-clock"></i> 06:00 - 23:00 (ICT)</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Nha Trang, Vietnam</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p>&copy; 2026 Gettravel. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top -->
+    <a href="#" class="scroll-top" id="scroll-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <script src="js/main.js"></script>
+
+    <!-- ════════════════════════════════════════════════════════
+         TOUR CARDS — rendered from shared STATIC_TOURS config
+         then updated with any API overrides saved in admin
+    ═════════════════════════════════════════════════════════ -->
+    <script src="js/tours-config.js"></script>
+    <script>
+    (function () {
+        'use strict';
+
+        var grid = document.getElementById('toursGrid');
+        var loading = document.getElementById('tours-loading');
+
+        // ── Escape HTML ────────────────────────────────────────
+        function esc(s) {
+            return String(s || '')
+                .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+
+        // ── Build one card HTML ────────────────────────────────
+        function buildCard(t) {
+            var badgeHtml = t.badge
+                ? '<div class="tour-item__badge">' + esc(t.badge) + '</div>'
+                : '';
+            var priceHtml = '';
+            if (t.adult_price > 0 || t.child_price > 0) {
+                var parts = [];
+                if (t.adult_price > 0) parts.push('Adult: $' + t.adult_price);
+                if (t.child_price > 0) parts.push('Child: $' + t.child_price);
+                priceHtml = '<div class="meta-item"><i class="fas fa-tag"></i><span>' + esc(parts.join(' / ')) + '</span></div>';
+            }
+            return '<div class="tour-item" data-category="' + esc(t.filterTag) + '" data-slug="' + esc(t.id) + '">' +
+                '<div class="tour-item__image">' +
+                    '<img src="' + esc(t.image_url) + '" alt="' + esc(t.title) + '" loading="lazy">' +
+                    badgeHtml +
+                '</div>' +
+                '<div class="tour-item__content">' +
+                    '<span class="tour-item__category">' + esc(t.category) + '</span>' +
+                    '<h3 class="tour-item__title">' + esc(t.title) + '</h3>' +
+                    '<p class="tour-item__description">' + esc(t.subtitle) + '</p>' +
+                    '<div class="tour-item__meta">' +
+                        '<div class="meta-item"><i class="far fa-clock"></i><span>' + esc(t.duration) + '</span></div>' +
+                        priceHtml +
+                    '</div>' +
+                    '<a href="' + esc(t.id) + '.html" class="btn btn--primary btn--block">' +
+                        '<span>View Details</span>' +
+                        '<i class="fas fa-arrow-right"></i>' +
+                    '</a>' +
+                '</div>' +
+            '</div>';
+        }
+
+        // ── Render all cards ───────────────────────────────────
+        function renderCards(tours) {
+            var html = '';
+            tours.forEach(function (t) {
+                if (t.status !== 'active') return; // skip hidden tours
+                html += buildCard(t);
+            });
+            grid.innerHTML = html;
+            attachFilters();
+        }
+
+        // ── Filter buttons ─────────────────────────────────────
+        function attachFilters() {
+            var btns  = document.querySelectorAll('.filter-btn');
+            var items = document.querySelectorAll('.tour-item');
+            btns.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    btns.forEach(function (b) { b.classList.remove('active'); });
+                    btn.classList.add('active');
+                    var filter = btn.dataset.filter;
+                    items.forEach(function (item) {
+                        item.style.display =
+                            (filter === 'all' || item.dataset.category === filter)
+                            ? '' : 'none';
+                    });
+                });
+            });
+        }
+
+        // ── Merge API overrides on top of static config ────────
+        async function loadAndRender() {
+            // Step 1: Render from STATIC_TOURS immediately (no API wait)
+            if (typeof STATIC_TOURS === 'undefined' || !STATIC_TOURS.length) {
+                loading.textContent = 'No tours configured.';
+                return;
+            }
+
+            // Work on a copy so we don't mutate the global
+            var tours = STATIC_TOURS.map(function (t) { return Object.assign({}, t); });
+            renderCards(tours);
+
+            // Step 2: Fetch API overrides — update any cards that admin changed
+            try {
+                var res = await fetch('tables/tours?limit=200');
+                if (!res.ok) return;
+                var data = await res.json();
+                var apiList = data.data || [];
+                if (!apiList.length) return;
+
+                // Build a slug → apiRecord map
+                var bySlug = {};
+                apiList.forEach(function (rec) {
+                    if (rec.slug) bySlug[rec.slug] = rec;
+                });
+
+                // Merge into our working copy
+                var changed = false;
+                tours = tours.map(function (t) {
+                    var api = bySlug[t.id];
+                    if (!api) return t;
+                    changed = true;
+                    var merged = Object.assign({}, t);
+                    // Only override non-empty API values
+                    ['title','subtitle','description','image_url','duration',
+                     'category','status','adult_price','child_price','badge'].forEach(function (f) {
+                        if (api[f] !== undefined && api[f] !== null && api[f] !== '') {
+                            merged[f] = api[f];
+                        }
+                    });
+                    return merged;
+                });
+
+                if (changed) renderCards(tours);
+
+            } catch (e) {
+                // Silent — static data is already shown
+            }
+        }
+
+        // ── Run ────────────────────────────────────────────────
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadAndRender);
+        } else {
+            loadAndRender();
+        }
+
+    })();
+    </script>
+</body>
+</html>

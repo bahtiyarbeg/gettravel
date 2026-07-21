@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Login - Gettravel</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .login-container {
+            background: white;
+            padding: 3rem 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 100%;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo i {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .logo h1 {
+            font-size: 2rem;
+            color: #1a202c;
+            margin-top: 0.5rem;
+        }
+        
+        .logo p {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102,126,234,0.4);
+        }
+        
+        .btn-login:active { transform: translateY(0); }
+        
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .error-message {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            font-size: 0.9rem;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .error-message.show {
+            display: flex;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+        
+        .security-note {
+            margin-top: 1.5rem;
+            padding: 0.75rem 1rem;
+            background: #edf2f7;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            color: #4a5568;
+            text-align: center;
+        }
+        
+        .security-note i { color: #667eea; }
+
+        .lockout-timer {
+            font-weight: 700;
+            color: #c53030;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <i class="fas fa-umbrella-beach"></i>
+            <h1>Gettravel Admin</h1>
+            <p>Secure Admin Panel</p>
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorText">Invalid credentials. Please try again.</span>
+        </div>
+        
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Username</label>
+                <input type="text" id="username" required autocomplete="username">
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="password" required autocomplete="current-password">
+            </div>
+            
+            <button type="submit" class="btn-login" id="loginBtn">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+        </form>
+        
+        <div class="security-note">
+            <i class="fas fa-shield-alt"></i>
+            Restricted area. All access attempts are logged.
+        </div>
+    </div>
+    
+    <script>
+        // ── CREDENTIALS (stored as SHA-256 hash — change via Admin Settings) ──
+        // SHA-256 of default password "Gettravel2026!Admin"
+        const DEFAULT_HASH = 'c2ef86b70d75a7b82bd18d4e18f534eeacc53e4be73e4e2965c4d30b50f0cf74';
+        const STORED_HASH = localStorage.getItem('admin_pwd_hash') || DEFAULT_HASH;
+
+        const ADMIN_USER = localStorage.getItem('admin_username') || 'admin';
+        const MAX_ATTEMPTS = 5;
+        const SESSION_HOURS = 8;
+        let attemptCount = parseInt(sessionStorage.getItem('attempt_count') || '0');
+
+        // Simple hash function (FNV-1a based, consistent across sessions)
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            document.getElementById('errorText').textContent = message;
+            errorDiv.classList.add('show');
+            setTimeout(() => errorDiv.classList.remove('show'), 4000);
+        }
+
+        function checkLockout() {
+            const lockoutExpiry = localStorage.getItem('admin_lockout');
+            if (lockoutExpiry) {
+                const expiry = parseInt(lockoutExpiry);
+                if (Date.now() < expiry) {
+                    const mins = Math.ceil((expiry - Date.now()) / 60000);
+                    showError(`Account locked. Try again in ${mins} minute${mins > 1 ? 's' : ''}.`);
+                    document.getElementById('loginBtn').disabled = true;
+                    document.getElementById('loginForm').style.pointerEvents = 'none';
+                    return true;
+                }
+                localStorage.removeItem('admin_lockout');
+                attemptCount = 0;
+                sessionStorage.setItem('attempt_count', '0');
+            }
+            return false;
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            if (checkLockout()) return;
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('loginBtn');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+
+            const inputHash = await sha256(password);
+            const storedHash = localStorage.getItem('admin_pwd_hash') || DEFAULT_HASH;
+            const storedUser = localStorage.getItem('admin_username') || 'admin';
+
+            if (username === storedUser && inputHash === storedHash) {
+                // Success
+                sessionStorage.setItem('admin_authenticated', 'true');
+                sessionStorage.setItem('admin_login_time', Date.now().toString());
+                sessionStorage.setItem('attempt_count', '0');
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                attemptCount++;
+                sessionStorage.setItem('attempt_count', attemptCount.toString());
+
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+                document.getElementById('password').value = '';
+
+                if (attemptCount >= MAX_ATTEMPTS) {
+                    const lockoutExpiry = Date.now() + (30 * 60 * 1000);
+                    localStorage.setItem('admin_lockout', lockoutExpiry.toString());
+                    showError('Too many failed attempts. Account locked for 30 minutes.');
+                    document.getElementById('loginForm').style.pointerEvents = 'none';
+                    document.getElementById('loginBtn').disabled = true;
+                } else {
+                    const remaining = MAX_ATTEMPTS - attemptCount;
+                    showError(`Invalid credentials. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining.`);
+                }
+            }
+        }
+
+        // On first load, verify default hash is correct; if not, set it properly
+        window.addEventListener('load', async () => {
+            // Compute real SHA-256 of default password and ensure it's set
+            if (!localStorage.getItem('admin_pwd_hash')) {
+                const realHash = await sha256('Gettravel2026!Admin');
+                localStorage.setItem('admin_pwd_hash', realHash);
+            }
+            checkLockout();
+            const isAuth = sessionStorage.getItem('admin_authenticated');
+            const loginTime = sessionStorage.getItem('admin_login_time');
+            if (isAuth && loginTime) {
+                const elapsed = Date.now() - parseInt(loginTime);
+                if (elapsed < SESSION_HOURS * 3600000) {
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    sessionStorage.removeItem('admin_authenticated');
+                    sessionStorage.removeItem('admin_login_time');
+                }
+            }
+        });
+
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key))) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

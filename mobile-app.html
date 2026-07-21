@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#D4AF37">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Gettravel">
+    
+    <title>Gettravel - Tours in Nha Trang</title>
+    <meta name="description" content="Mobile app for booking tours in Nha Trang, Vietnam">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Icons (inline SVG data-URI — no external image files required) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='36' fill='%23667eea'/%3E%3Ctext x='90' y='125' font-size='96' text-anchor='middle' fill='white'%3E%E2%9C%88%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23667eea'/%3E%3Ctext x='16' y='23' font-size='18' text-anchor='middle' fill='white'%3E%E2%9C%88%3C/text%3E%3C/svg%3E">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ══ Google Analytics 4 ══ -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX',{anonymize_ip:true});</script>
+    <!-- ══ Yandex.Metrica ══ -->
+    <script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0];k.async=1;k.src=r;a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");if(typeof ym==='function'&&window._ymId){ym(window._ymId,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});}</script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/XXXXXXXX" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
+    
+    <style>
+        :root {
+            --color-primary: #D4AF37;
+            --color-primary-dark: #B8941F;
+            --color-secondary: #1a1a2e;
+            --color-text: #333333;
+            --color-text-light: #666666;
+            --color-white: #ffffff;
+            --color-gray: #f5f5f5;
+            --color-success: #28a745;
+            --color-danger: #dc3545;
+            --color-bg: #fafafa;
+            
+            --font-primary: 'Playfair Display', serif;
+            --font-secondary: 'Inter', sans-serif;
+            
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: var(--font-secondary);
+            color: var(--color-text);
+            background: var(--color-bg);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: 70px;
+        }
+        
+        /* Header */
+        .mobile-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(135deg, var(--color-secondary) 0%, #16213e 100%);
+            color: var(--color-white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: var(--shadow-md);
+            z-index: 1000;
+        }
+        
+        .mobile-header__logo {
+            font-family: var(--font-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        
+        .mobile-header__actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .mobile-header__btn {
+            background: transparent;
+            border: none;
+            color: var(--color-white);
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 8px;
+            position: relative;
+        }
+        
+        .mobile-header__badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--color-danger);
+            color: white;
+            border-radius: 10px;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .mobile-content {
+            margin-top: 60px;
+            padding: 15px;
+        }
+        
+        /* Tour Card */
+        .tour-card {
+            background: var(--color-white);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .tour-card:active {
+            transform: scale(0.98);
+        }
+        
+        .tour-card__image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .tour-card__content {
+            padding: 15px;
+        }
+        
+        .tour-card__title {
+            font-family: var(--font-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--color-text);
+        }
+        
+        .tour-card__meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+        }
+        
+        .tour-card__meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .tour-card__price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--color-gray);
+        }
+        
+        .tour-card__price-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        
+        .tour-card__btn {
+            background: var(--color-primary);
+            color: var(--color-white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--color-white);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .bottom-nav__item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 0.75rem;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .bottom-nav__item i {
+            font-size: 1.5rem;
+        }
+        
+        .bottom-nav__item.active {
+            color: var(--color-primary);
+        }
+        
+        .bottom-nav__item:active {
+            transform: scale(0.9);
+        }
+        
+        /* Chat Modal */
+        .chat-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--color-white);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+        }
+        
+        .chat-modal.active {
+            display: flex;
+        }
+        
+        .chat-header {
+            height: 60px;
+            background: linear-gradient(135deg, var(--color-secondary) 0%, #16213e 100%);
+            color: var(--color-white);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 15px;
+        }
+        
+        .chat-header__back {
+            background: transparent;
+            border: none;
+            color: var(--color-white);
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+        
+        .chat-header__title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        
+        .chat-message {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-message--incoming {
+            flex-direction: row;
+        }
+        
+        .chat-message--outgoing {
+            flex-direction: row-reverse;
+        }
+        
+        .chat-message__avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .chat-message__content {
+            max-width: 70%;
+        }
+        
+        .chat-message__bubble {
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin-bottom: 5px;
+            word-wrap: break-word;
+        }
+        
+        .chat-message--incoming .chat-message__bubble {
+            background: var(--color-white);
+            border-bottom-left-radius: 4px;
+        }
+        
+        .chat-message--outgoing .chat-message__bubble {
+            background: var(--color-primary);
+            color: var(--color-white);
+            border-bottom-right-radius: 4px;
+        }
+        
+        .chat-message__time {
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+            padding: 0 10px;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background: var(--color-white);
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .chat-input__field {
+            flex: 1;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-family: var(--font-secondary);
+            outline: none;
+        }
+        
+        .chat-input__field:focus {
+            border-color: var(--color-primary);
+        }
+        
+        .chat-input__send {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-input__send:active {
+            transform: scale(0.9);
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .quick-actions::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .quick-action {
+            flex-shrink: 0;
+            background: var(--color-white);
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .quick-action:active {
+            transform: scale(0.95);
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid var(--color-primary);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Section Title */
+        .section-title {
+            font-family: var(--font-primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--color-text);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--color-text-light);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--color-gray);
+            margin-bottom: 15px;
+        }
+        
+        .empty-state p {
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <div class="mobile-header__logo">Gettravel</div>
+        <div class="mobile-header__actions">
+            <button class="mobile-header__btn" id="chatBtn">
+                <i class="fas fa-comments"></i>
+                <span class="mobile-header__badge" id="chatBadge">3</span>
+            </button>
+            <button class="mobile-header__btn" id="callBtn">
+                <i class="fas fa-phone"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="mobile-content" id="mainContent">
+        <h2 class="section-title">🔥 Popular Tours</h2>
+        
+        <div class="tour-card">
+            <img src="https://sspark.genspark.ai/cfimages?u1=LJN9WLzWkQgfZlndtajUh5VRTpiLFZ4cyWcLGwqkBkIoQnvSopDz8La%2B7g2ZWpqF64NxR1yS6Yu14XW4nsTI3wnLZk2SB5xY3%2FaBCLZqpjjqVbgXnQ%2B5CElJdwwn1N7e4Sk%3D&u2=FryHzoZiE50sj0sE&width=600" alt="Emperor Cruise" class="tour-card__image">
+            <div class="tour-card__content">
+                <h3 class="tour-card__title">Emperor Cruise 5★</h3>
+                <div class="tour-card__meta">
+                    <span class="tour-card__meta-item">
+                        <i class="fas fa-clock"></i> Evening
+                    </span>
+                    <span class="tour-card__meta-item">
+                        <i class="fas fa-star"></i> Premium
+                    </span>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--color-text-light); line-height: 1.5;">
+                    Dinner on a 5-star yacht with live music and panoramic bay views
+                </p>
+                <div class="tour-card__price">
+                    <span class="tour-card__price-value">$120</span>
+                    <button class="tour-card__btn" onclick="bookTour('Emperor Cruise')">Book Now</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tour-card">
+            <img src="https://sspark.genspark.ai/cfimages?u1=2TQtuRINp0TTsUjReeNWuywQ0F9gSSmunF58Ud4o2eAY7TbI3cOB3%2Bqw3GRdsSz1bmcm6D2yd982I%2Benqg8V5lwLeUzHxNmYH%2BtnfA%3D%3D&u2=vUEg7%2BTuGjzIE5AR&width=600" alt="Hon Mun" class="tour-card__image">
+            <div class="tour-card__content">
+                <h3 class="tour-card__title">Hon Mun Island</h3>
+                <div class="tour-card__meta">
+                    <span class="tour-card__meta-item">
+                        <i class="fas fa-clock"></i> Full Day
+                    </span>
+                    <span class="tour-card__meta-item">
+                        <i class="fas fa-swimmer"></i> Snorkeling
+                    </span>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--color-text-light); line-height: 1.5;">
+                    Snorkeling in coral gardens with crystal water and sea turtles
+                </p>
+                <div class="tour-card__price">
+                    <span class="tour-card__price-value">$45</span>
+                    <button class="tour-card__btn" onclick="bookTour('Hon Mun')">Book Now</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tour-card">
+            <img src="https://sspark.genspark.ai/cfimages?u1=pM0uI2qZ2iUt7OhaH7XhXDwg8vP0LnvPqNQ24zQJh1PGjuDQ7PLhvf9wXsIQ%2FitrU2Z6g2u8xJAKmvhnydogkbu%2BAZCAqD8hwQVrc9IoyyZ7v1cFKdYSotf%2BNixS3%2F0JDMvyF3fv4DskO5vIzHfRaA%3D%3D&u2=L8lIvWHjnh53s6pu&width=600" alt="VinPearl" class="tour-card__image">
+            <div class="tour-card__content">
+                <h3 class="tour-card__title">VinPearl Nha Trang</h3>
+                <div class="tour-card__meta">
+                    <span class="tour-card__meta-item">
+                        <i class="fas fa-clock"></i> Full Day
+                    </span>
+                    <span class="tour-card__meta-item">
+                        <i class="fas fa-umbrella-beach"></i> Theme Park
+                    </span>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--color-text-light); line-height: 1.5;">
+                    Waterpark, attractions and aquarium on the island of fun
+                </p>
+                <div class="tour-card__price">
+                    <span class="tour-card__price-value">$65</span>
+                    <button class="tour-card__btn" onclick="bookTour('VinPearl')">Book Now</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="#" class="bottom-nav__item active" data-page="home">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="bottom-nav__item" data-page="tours">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Tours</span>
+        </a>
+        <a href="#" class="bottom-nav__item" data-page="bookings">
+            <i class="fas fa-calendar-check"></i>
+            <span>Bookings</span>
+        </a>
+        <a href="#" class="bottom-nav__item" data-page="profile">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Chat Modal -->
+    <div class="chat-modal" id="chatModal">
+        <div class="chat-header">
+            <button class="chat-header__back" id="closeChatBtn">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="chat-header__title">Chat with Manager</div>
+        </div>
+        
+        <div class="quick-actions">
+            <button class="quick-action" onclick="sendQuickMessage('I want to book a tour')">
+                🎫 Book a Tour
+            </button>
+            <button class="quick-action" onclick="sendQuickMessage('What tours are available?')">
+                ❓ Available Tours
+            </button>
+            <button class="quick-action" onclick="sendQuickMessage('I need help')">
+                💬 Need Help
+            </button>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message chat-message--incoming">
+                <div class="chat-message__avatar">M</div>
+                <div class="chat-message__content">
+                    <div class="chat-message__bubble">
+                        Hello! 👋 I'm your personal manager. How can I help you?
+                    </div>
+                    <div class="chat-message__time">10:30</div>
+                </div>
+            </div>
+            
+            <div class="chat-message chat-message--incoming">
+                <div class="chat-message__avatar">M</div>
+                <div class="chat-message__content">
+                    <div class="chat-message__bubble">
+                        We have special offers today on Emperor Cruise and Hon Mun tours! 🎉
+                    </div>
+                    <div class="chat-message__time">10:31</div>
+                </div>
+            </div>
+            
+            <div class="chat-message chat-message--incoming">
+                <div class="chat-message__avatar">M</div>
+                <div class="chat-message__content">
+                    <div class="chat-message__bubble">
+                        Book today and get 15% off! ⏰
+                    </div>
+                    <div class="chat-message__time">10:31</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" class="chat-input__field" id="messageInput" placeholder="Type a message...">
+            <button class="chat-input__send" id="sendMessageBtn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(registration => console.log('SW registered:', registration))
+                .catch(error => console.log('SW registration failed:', error));
+        }
+
+        // Chat Modal
+        const chatBtn = document.getElementById('chatBtn');
+        const closeChatBtn = document.getElementById('closeChatBtn');
+        const chatModal = document.getElementById('chatModal');
+        const chatBadge = document.getElementById('chatBadge');
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendMessageBtn = document.getElementById('sendMessageBtn');
+
+        chatBtn.addEventListener('click', () => {
+            chatModal.classList.add('active');
+            chatBadge.style.display = 'none';
+            scrollToBottom();
+        });
+
+        closeChatBtn.addEventListener('click', () => {
+            chatModal.classList.remove('active');
+        });
+
+        function sendQuickMessage(text) {
+            sendMessage(text);
+        }
+
+        sendMessageBtn.addEventListener('click', () => {
+            const text = messageInput.value.trim();
+            if (text) {
+                sendMessage(text);
+                messageInput.value = '';
+            }
+        });
+
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const text = messageInput.value.trim();
+                if (text) {
+                    sendMessage(text);
+                    messageInput.value = '';
+                }
+            }
+        });
+
+        function sendMessage(text) {
+            const now = new Date();
+            const time = now.getHours().toString().padStart(2, '0') + ':' + 
+                         now.getMinutes().toString().padStart(2, '0');
+            
+            const messageHTML = `
+                <div class="chat-message chat-message--outgoing">
+                    <div class="chat-message__avatar">Me</div>
+                    <div class="chat-message__content">
+                        <div class="chat-message__bubble">${text}</div>
+                        <div class="chat-message__time">${time}</div>
+                    </div>
+                </div>
+            `;
+            
+            chatMessages.insertAdjacentHTML('beforeend', messageHTML);
+            scrollToBottom();
+            
+            // Auto-reply simulation
+            setTimeout(() => {
+                const replyHTML = `
+                    <div class="chat-message chat-message--incoming">
+                        <div class="chat-message__avatar">M</div>
+                        <div class="chat-message__content">
+                            <div class="chat-message__bubble">
+                                Thank you for your message! 😊 Our manager will contact you within 5 minutes.
+                            </div>
+                            <div class="chat-message__time">${time}</div>
+                        </div>
+                    </div>
+                `;
+                chatMessages.insertAdjacentHTML('beforeend', replyHTML);
+                scrollToBottom();
+            }, 1000);
+        }
+
+        function scrollToBottom() {
+            setTimeout(() => {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 100);
+        }
+
+        // Call Button
+        const callBtn = document.getElementById('callBtn');
+        callBtn.addEventListener('click', () => {
+            window.location.href = 'tel:+84797722507';
+        });
+
+        // Book Tour
+        function bookTour(tourName) {
+            if (confirm(`Book tour "${tourName}"?\n\nOur manager will contact you for confirmation.`)) {
+                // Open chat with pre-filled message
+                chatModal.classList.add('active');
+                setTimeout(() => {
+                    sendMessage(`I want to book a tour: ${tourName}`);
+                }, 300);
+            }
+        }
+
+        // Bottom Navigation
+        const navItems = document.querySelectorAll('.bottom-nav__item');
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                
+                const page = item.dataset.page;
+                handleNavigation(page);
+            });
+        });
+
+        function handleNavigation(page) {
+            const mainContent = document.getElementById('mainContent');
+            
+            if (page === 'home') {
+                location.reload();
+            } else if (page === 'tours') {
+                window.location.href = 'tours.html';
+            } else if (page === 'bookings') {
+                mainContent.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <p>You have no bookings yet</p>
+                        <p style="font-size: 0.9rem; margin-top: 10px;">Book a tour right now!</p>
+                    </div>
+                `;
+            } else if (page === 'profile') {
+                mainContent.innerHTML = `
+                    <h2 class="section-title">Profile</h2>
+                    <div style="background: white; padding: 20px; border-radius: 16px; box-shadow: var(--shadow-sm);">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--color-primary); 
+                                        margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; 
+                                        color: white; font-size: 2rem;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h3 style="font-size: 1.3rem; margin-bottom: 5px;">Guest</h3>
+                            <p style="color: var(--color-text-light); font-size: 0.9rem;">+84 XXX XXX XXX</p>
+                        </div>
+                        
+                        <div style="border-top: 1px solid var(--color-gray); padding-top: 20px;">
+                            <a href="tel:+84797722507" style="display: flex; align-items: center; gap: 15px; padding: 15px; 
+                                                               background: var(--color-gray); border-radius: 12px; 
+                                                               text-decoration: none; color: var(--color-text); margin-bottom: 10px;">
+                                <i class="fas fa-phone" style="color: var(--color-primary); font-size: 1.2rem;"></i>
+                                <span style="font-weight: 500;">Call Manager</span>
+                            </a>
+                            
+                            <a href="https://wa.me/84797722507" style="display: flex; align-items: center; gap: 15px; padding: 15px; 
+                                                                      background: var(--color-gray); border-radius: 12px; 
+                                                                      text-decoration: none; color: var(--color-text); margin-bottom: 10px;">
+                                <i class="fab fa-whatsapp" style="color: #25D366; font-size: 1.2rem;"></i>
+                                <span style="font-weight: 500;">WhatsApp</span>
+                            </a>
+                            
+                            <a href="mailto:tourvietn@gmail.com" style="display: flex; align-items: center; gap: 15px; padding: 15px; 
+                                                                        background: var(--color-gray); border-radius: 12px; 
+                                                                        text-decoration: none; color: var(--color-text);">
+                                <i class="fas fa-envelope" style="color: var(--color-primary); font-size: 1.2rem;"></i>
+                                <span style="font-weight: 500;">Email</span>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Install prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install banner
+            const banner = document.createElement('div');
+            banner.style.cssText = `
+                position: fixed; bottom: 80px; left: 15px; right: 15px; 
+                background: white; padding: 15px 20px; border-radius: 12px; 
+                box-shadow: var(--shadow-lg); z-index: 999; display: flex; 
+                align-items: center; gap: 15px;
+            `;
+            banner.innerHTML = `
+                <i class="fas fa-download" style="color: var(--color-primary); font-size: 1.5rem;"></i>
+                <div style="flex: 1;">
+                    <strong>Install App</strong>
+                    <p style="font-size: 0.85rem; color: var(--color-text-light); margin: 0;">
+                        Get quick access to tours
+                    </p>
+                </div>
+                <button id="installBtn" style="background: var(--color-primary); color: white; 
+                                               border: none; padding: 10px 20px; border-radius: 8px; 
+                                               font-weight: 600; cursor: pointer;">
+                    Install
+                </button>
+                <button id="dismissBtn" style="background: transparent; border: none; 
+                                               color: var(--color-text-light); font-size: 1.2rem; cursor: pointer;">
+                    ×
+                </button>
+            `;
+            document.body.appendChild(banner);
+            
+            document.getElementById('installBtn').addEventListener('click', async () => {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    banner.remove();
+                }
+            });
+            
+            document.getElementById('dismissBtn').addEventListener('click', () => {
+                banner.remove();
+            });
+        });
+    </script>
+</body>
+</html>

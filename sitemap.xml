@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- ══ Главная страница ══ -->
+  <url>
+    <loc>https://gettravel.fun/</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://gettravel.fun/?lang=ru"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gettravel.fun/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://gettravel.fun/?lang=ko"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://gettravel.fun/?lang=zh"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://gettravel.fun/?lang=vi"/>
+    <image:image>
+      <image:loc>https://sspark.genspark.ai/cfimages?u1=jG544un1mMYPIMXBhNkWyxKZzy5ywf30dNGbiAP2cbxwQcytj%2BPyhx6wouHSlfuI5fM7nrV2Xp48V6uxodoRXs48KZ4oFABIY%2B0chO5sR%2F3bP9sQCCdEE5QeyPM%2FQYyjG1%2BZWJUi61HnalDXe4j%2F2giT%2Bsa2iAaofOMg4HY%2FrVNeJDdFxcXbY7TJfCX5l%2Fusc8sMw7OVAN1MWBCLdTtyUcPfYtpDNqQznCEzZTyuFBoLsxO0sZ5b6zrB5B4A1e4A51YwgbNjh2sx8l2DWbXplmDPsR4XiqmYyVIZHDEu5XObEk8%3D&u2=EHJL3YPeYO56Q6SN&width=2560</image:loc>
+      <image:title>Gettravel - Туры в Нячанге, Вьетнам</image:title>
+    </image:image>
+  </url>
+
+  <!-- ══ Каталог туров ══ -->
+  <url>
+    <loc>https://gettravel.fun/tours.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <!-- ══ Мобильное приложение ══ -->
+  <url>
+    <loc>https://gettravel.fun/mobile-app.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ══ Круизы и VIP ══ -->
+  <url>
+    <loc>https://gettravel.fun/tour-emperor-cruise.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-mirae-p1.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-mirae-p2.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-do-theatre.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ══ Островные туры ══ -->
+  <url>
+    <loc>https://gettravel.fun/tour-4-islands.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-3-islands.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-hon-mun.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-hon-tam.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-hon-tam-mud.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-mini-beach.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-hon-mun-hon-tam.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-hon-mun-mini-beach.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-diep-son.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-doi-dep.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-robinson.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-nemo.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ══ Природа и водопады ══ -->
+  <url>
+    <loc>https://gettravel.fun/tour-yang-bay.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-ba-ho.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-phu-yen.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ══ Экстрим и приключения ══ -->
+  <url>
+    <loc>https://gettravel.fun/tour-zen-atv.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-kong-forest.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gettravel.fun/tour-vinpearl.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+</urlset>
